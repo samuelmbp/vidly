@@ -19,6 +19,7 @@
   "homepage": "https://github.com/samuelmbp/vidly#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "joi": "^13.1.0"
+    "joi": "^13.1.0",
+    "nodemon": "^2.0.15"
   }
 }

@@ -30,6 +30,16 @@ app.get('/api/genres', (req, res) => {
 	res.send(genres);
 });
 
+// Get -> retrieve single genre
+app.get('/api/genres/:id', (req, res) => {
+	const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
+
+	if (!genre)
+		return res.status(404).send('The genre with the given ID was not found.');
+
+	res.send(genre);
+});
+
 // Post -> create a new genre
 app.post('/api/genres', (req, res) => {
 	// Validation
@@ -61,15 +71,6 @@ app.put('/api/genres/:id', (req, res) => {
 	res.send(genre);
 });
 
-// Genre validation
-function validateGenre(genre) {
-	const schema = {
-		name: Joi.string().min(3).required(),
-	};
-
-	return Joi.validate(genre, schema, (err, value) => {});
-}
-
 // Delete Method
 app.delete('/api/genres/:id', (req, res) => {
 	// Find the genre by id
@@ -85,6 +86,15 @@ app.delete('/api/genres/:id', (req, res) => {
 	// Send to the genre in the response body
 	res.send(genre);
 });
+
+// Genre validation
+function validateGenre(genre) {
+	const schema = {
+		name: Joi.string().min(3).required(),
+	};
+
+	return Joi.validate(genre, schema, (err, value) => {});
+}
 
 // Dynamic PORT
 const port = process.env.PORT || 3000;

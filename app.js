@@ -1,7 +1,5 @@
 const Joi = require('joi');
 const express = require('express');
-const { join } = require('path');
-const { validate } = require('isemail');
 const app = express();
 
 // Middleware for json data
@@ -71,6 +69,22 @@ function validateGenre(genre) {
 
 	return Joi.validate(genre, schema, (err, value) => {});
 }
+
+// Delete Method
+app.delete('/api/genres/:id', (req, res) => {
+	// Find the genre by id
+	const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
+
+	if (!genre)
+		return res.status(404).send('The genre with the given ID does not exists.');
+
+	// If exists -> delete
+	const index = genres.indexOf(genre);
+	genres.splice(index, 1);
+
+	// Send to the genre in the response body
+	res.send(genre);
+});
 
 // Dynamic PORT
 const port = process.env.PORT || 3000;

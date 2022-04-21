@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 const genres = require('./routes/genres');
+const customers = require('./routes/customers');
 
 /** Connection MongoDB */
 mongoose
@@ -19,6 +20,8 @@ mongoose
 // Middleware for json data
 app.use(express.json());
 app.use('/api/genres', genres);
+console.log('Customers is loading...');
+app.use('/api/customers', customers);
 
 // Dynamic PORT
 const port = process.env.PORT || 3000;

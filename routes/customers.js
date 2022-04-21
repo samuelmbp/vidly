@@ -24,7 +24,8 @@ const customersSchema = mongoose.Schema({
 	phone: {
 		type: String,
 		required: true,
-		maxLength: 11,
+		minLength: 9,
+		maxLength: 14,
 	},
 
 	isGold: {
@@ -40,5 +41,24 @@ router.get('/', async (req, res) => {
 	const customer = await Customer.find();
 	res.send(customer);
 });
+
+router.post('/', async (req, res) => {
+	const validate = validateCustomer(req.body);
+	if (validate) return res.status(400).send(validate.error);
+
+	let customer = new Customer(req.body);
+	customer = await customer.save();
+	res.send(customer);
+});
+
+const validateCustomer = (customer) => {
+	const schema = {
+		name: Joi.string().min(3).required(),
+		phone: Joi.string().min(6).required(),
+		isGold: Joi.boolean().required(),
+	};
+
+	return Joi.validate(customer, schema, (err, value) => {});
+};
 
 module.exports = router;

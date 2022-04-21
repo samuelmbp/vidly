@@ -24,14 +24,13 @@ const customersSchema = mongoose.Schema({
 	phone: {
 		type: String,
 		required: true,
-		minLength: 9,
-		maxLength: 14,
+		minLength: 5,
+		maxLength: 55,
 	},
 
 	isGold: {
 		type: Boolean,
-		required: true,
-		maxLength: 5,
+		default: false,
 	},
 });
 
@@ -46,16 +45,39 @@ router.post('/', async (req, res) => {
 	const validate = validateCustomer(req.body);
 	if (validate) return res.status(400).send(validate.error);
 
-	let customer = new Customer(req.body);
+	let customer = new Customer({
+		name: req.body.name,
+		phone: req.body.phone,
+		isGold: req.body.isGold,
+	});
+
 	customer = await customer.save();
+	res.send(customer);
+});
+
+router.put('/:id', async (req, res) => {
+	const validate = validateCustomer(req.body);
+	if (validate) return res.status(400).send(validate.error);
+
+	const customer = await Customer.findByIdAndUpdate(req.params.id, {
+		name: req.body.name,
+		phone: req.body.phone,
+		isGold: req.body.isGold,
+	});
+
+	if (!customer)
+		return res
+			.status(404)
+			.send('The customer with the given ID was not found.');
+
 	res.send(customer);
 });
 
 const validateCustomer = (customer) => {
 	const schema = {
-		name: Joi.string().min(3).required(),
-		phone: Joi.string().min(6).required(),
-		isGold: Joi.boolean().required(),
+		name: Joi.string().min(5).max(55).required(),
+		phone: Joi.string().min(5).max(55).required(),
+		isGold: Joi.boolean(),
 	};
 
 	return Joi.validate(customer, schema, (err, value) => {});

@@ -4,6 +4,7 @@ const app = express();
 
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
+const movies = require('./routes/movies');
 
 /** Connection MongoDB */
 mongoose
@@ -20,8 +21,9 @@ mongoose
 // Middleware for json data
 app.use(express.json());
 app.use('/api/genres', genres);
-console.log('Customers is loading...');
 app.use('/api/customers', customers);
+console.log(('Movies api...'));
+app.use('/api/movies', movies);
 
 // Dynamic PORT
 const port = process.env.PORT || 3000;

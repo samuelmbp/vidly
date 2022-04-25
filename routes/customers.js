@@ -19,12 +19,13 @@ router.post('/', async (req, res) => {
 	const validate = validateCustomer(req.body);
 	if (validate) return res.status(400).send(validate.error);
 
-	let customer = new Customer({
+	const customer = new Customer({
 		name: req.body.name,
 		phone: req.body.phone,
 		isGold: req.body.isGold,
 	});
-	customer = await customer.save();
+
+	await customer.save();
 	res.send(customer);
 });
 
@@ -32,12 +33,14 @@ router.put('/:id', async (req, res) => {
 	const validate = validateCustomer(req.body);
 	if (validate) return res.status(400).send(validate.error);
 
-	const customer = await Customer.findByIdAndUpdate(req.params.id, 
+	const customer = await Customer.findByIdAndUpdate(
+		req.params.id,
 		{
 			name: req.body.name,
 			phone: req.body.phone,
 			isGold: req.body.isGold,
-		}, { new: true }
+		},
+		{ new: true }
 	);
 
 	if (!customer)

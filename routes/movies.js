@@ -10,7 +10,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 	const movie = await Movie.findById(req.params.id);
-	if(!movie) return res.status(400).send('The movie with the given ID was not found.');
+	if (!movie)
+		return res.status(400).send('The movie with the given ID was not found.');
 	res.send(movie);
 });
 
@@ -21,7 +22,7 @@ router.post('/', async (req, res) => {
 	const genre = await Genre.findById(req.body.genreId);
 	if (!genre) return res.status(400).send('Invalid genre.');
 
-	let movie = new Movie({
+	const movie = new Movie({
 		title: req.body.title,
 		// Embed the genre document
 		genre: {
@@ -32,7 +33,7 @@ router.post('/', async (req, res) => {
 		dailyRentalRate: req.body.dailyRentalRate,
 	});
 
-	movie = await movie.save();
+	await movie.save();
 	res.send(movie);
 });
 
@@ -43,7 +44,8 @@ router.put('/:id', async (req, res) => {
 	const genre = await Genre.findById(req.body.genreId);
 	if (!genre) return res.status(400).send('Invalid genre.');
 
-	const movie = await Movie.findByIdAndUpdate(req.params.id, 
+	const movie = await Movie.findByIdAndUpdate(
+		req.params.id,
 		{
 			title: req.body.title,
 			genre: {
@@ -52,16 +54,20 @@ router.put('/:id', async (req, res) => {
 			},
 			numberInStock: req.body.numberInStock,
 			dailyRentalRate: req.body.dailyRentalRate,
-	}, 	{ new: true });
+		},
+		{ new: true }
+	);
 
-	if(!movie) return res.status(400).send('The movie with the given ID was not found.');
+	if (!movie)
+		return res.status(400).send('The movie with the given ID was not found.');
 
 	movie.send();
 });
 
 router.delete('/:id', async (req, res) => {
 	const movie = await Movie.findByIdAndDelete(req.params.id);
-	if(!movie) return res.status(400).send('The movie with the given ID was not found.');
+	if (!movie)
+		return res.status(400).send('The movie with the given ID was not found.');
 	res.send(movie);
 });
 

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/samuelmbp/vidly#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.3",
     "joi": "^13.1.0",
     "lodash": "^4.17.4",

@@ -27,7 +27,7 @@ mongoose
  * http://localhost:3000/api/genres
  */
 
-// Middleware for json data
+// Middleware helper
 app.use(express.json());
 app.use('/api/genres', genres);
 app.use('/api/customers', customers);

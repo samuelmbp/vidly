@@ -1,5 +1,6 @@
 const { Rental, validateRentals } = require('../models/rental');
 const { Customer } = require('../models/customer');
+const auth = require('../middleware/auth');
 const { Movie } = require('../models/movie');
 const express = require('express');
 const router = express.Router();
@@ -9,7 +10,7 @@ router.get('/', async (req, res) => {
 	res.send(rental);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 	const validate = validateRentals(req.body);
 	if (validate) return res.status(400).send(validate.error.details[0].message);
 

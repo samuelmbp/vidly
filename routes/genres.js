@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const { Genre, validateGenre } = require('../models/genre');
 const express = require('express');
 const router = express.Router();
@@ -8,15 +9,14 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-
-	
-	const genre = await Genre.findById(req.params.id);
+	const genre = await Genre.findById(req.params.id).sort('name');
 	if (!genre)
 		return res.status(404).send('The genre with the given ID was not found.');
 	res.send(genre);
 });
 
-router.post('/', async (req, res) => {
+/** Add auth middleware function for authorization */
+router.post('/', auth,  async (req, res) => {
 	const result = validateGenre(req.body.name);
 	if (result) return res.status(400).send(result.error);
 

@@ -1,3 +1,4 @@
+const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
 const { Genre, validateGenre } = require('../models/genre');
 const express = require('express');
@@ -16,7 +17,7 @@ router.get('/:id', async (req, res) => {
 });
 
 /** Add auth middleware function for authorization */
-router.post('/', auth,  async (req, res) => {
+router.post('/', auth, async (req, res) => {
 	const result = validateGenre(req.body.name);
 	if (result) return res.status(400).send(result.error);
 
@@ -38,15 +39,13 @@ router.put('/:id', async (req, res) => {
 	if (!genre)
 		// Checking for null values
 		return res.status(404).send('The genre with the given ID was not found.');
-
 	res.send(genre);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
 	const genre = await Genre.findByIdAndDelete(req.params.id);
 	if (!genre)
 		return res.status(404).send('The genre with the given ID does not exists.');
-
 	res.send(genre);
 });
 
